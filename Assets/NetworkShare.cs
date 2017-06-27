@@ -10,16 +10,25 @@ public class NetworkShare : MonoBehaviour
 {
 
     private int reliableChannelId;
-    private int socketPort = 514;
+    private int socketPort = 5999;
     private int socketId;
+    private List<int> connectionId;
+    public string[] remoteIps;
+    public int[] remotePorts;
 
-
-    private int connectionId;
 
 
     // Use this for initialization
     void Start()
     {
+        if (remotePorts.Length == 0 || remoteIps.Length == 0)
+        {
+            Debug.Log("No client specified");
+            return;
+        }
+
+        connectionId = new List<int>();
+
         NetworkTransport.Init();
         ConnectionConfig config = new ConnectionConfig();
         reliableChannelId = config.AddChannel(QosType.Reliable);
@@ -69,8 +78,12 @@ public class NetworkShare : MonoBehaviour
     public void Connect()
     {
         byte error;
-        connectionId = NetworkTransport.Connect(socketId, "127.0.0.1", 4999, 0, out error);
-        Debug.Log("Connected to server. ConnectionId: " + connectionId);
+
+        for (int i = 0; i < remoteIps.Length; i++)
+        {
+            connectionId.Add(NetworkTransport.Connect(socketId, remoteIps[i], remotePorts[i], 0, out error));
+            Debug.Log("Connected to server. ConnectionId: " + connectionId);
+        }
     }
 
     public void SendSocketMessage()
@@ -82,8 +95,10 @@ public class NetworkShare : MonoBehaviour
         formatter.Serialize(stream, "HelloServer");
 
         int bufferSize = 1024;
-
-        NetworkTransport.Send(socketId, connectionId, reliableChannelId, buffer, bufferSize, out error);
+        for (int i = 0; i < remoteIps.Length; i++)
+        {
+            NetworkTransport.Send(socketId, connectionId[i], reliableChannelId, buffer, bufferSize, out error);
+        }
     }
 
 
