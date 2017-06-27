@@ -82,7 +82,7 @@ public class NetworkShare : MonoBehaviour
         for (int i = 0; i < remoteIps.Length; i++)
         {
             connectionId.Add(NetworkTransport.Connect(socketId, remoteIps[i], remotePorts[i], 0, out error));
-            Debug.Log("Connected to server. ConnectionId: " + connectionId);
+            Debug.Log("Connected to server. ConnectionId: " + connectionId[i]);
         }
     }
 
