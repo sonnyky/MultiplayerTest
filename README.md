@@ -12,3 +12,6 @@ For a project, I needed a way to get multiple computers to talk to each other, a
 5. Inside the NetworkShare script, change the socketPort variable to a port of your choice (if necessary).
 6. Hit Play.
 7 If everything works well, you can press the S key and see the incoming message received on the other PC's Unity console.
+
+## Credits
+I followed the tutorial listed [here](http://www.robotmonkeybrain.com/good-enough-guide-to-unitys-unet-transport-layer-llapi/).
